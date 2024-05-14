@@ -10,11 +10,13 @@ public class ShowPlaneData : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        PlaneData planeDataList = GetLocation.instance.planeDataList;
+        List<PlaneData> planeDataList = GetLocation.instance.planeDataList;
 
+        Debug.Log(planeDataList.Count);
         planeDataText.text = "Plane Data:\n";
-        foreach (var planeData in planeDataList.List)
+        foreach (var planeData in planeDataList)
         {
+            Debug.Log($"Position: {planeData.Position}, Rotation: {planeData.Rotation}, Size: {planeData.Size}\n");
             planeDataText.text += $"Position: {planeData.Position}, Rotation: {planeData.Rotation}, Size: {planeData.Size}\n";
         }
     }

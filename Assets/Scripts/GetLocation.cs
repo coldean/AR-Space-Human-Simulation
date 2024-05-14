@@ -29,7 +29,7 @@ public class GetLocation : MonoBehaviour
     public static GetLocation instance; // 싱글톤 패턴을 사용하여 인스턴스를 전역적으로 접근 가능하도록 설정
 
     public ARPlaneManager planeManager;
-    public PlaneData planeDataList;
+    public List<PlaneData> planeDataList;
 
     void Awake()
     {
@@ -48,13 +48,18 @@ public class GetLocation : MonoBehaviour
     {
         planeManager = GetComponent<ARPlaneManager>();
         planeManager.planesChanged += OnPlanesChanged;
+        planeDataList = new List<PlaneData>();
     }
 
     void OnPlanesChanged(ARPlanesChangedEventArgs eventArgs)
     {
-        planeDataList = new PlaneData();
+        if (eventArgs == null)
+            return;
+
         foreach (var plane in eventArgs.added)
         {
+            if (plane == null)
+                continue;
             // Plane 데이터 수집
             PlaneData planeData = new PlaneData
             {
@@ -64,7 +69,7 @@ public class GetLocation : MonoBehaviour
             };
             Debug.Log($"Plane position:{planeData.Position}, Plane size: {planeData.Size}");
 
-            planeDataList.List.Add(planeData);
+            planeDataList.Add(planeData);
             // Plane 데이터 직렬화
             //string serializedPlaneData = JsonUtility.ToJson(planeData);
 
