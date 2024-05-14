@@ -10,7 +10,7 @@ public class ShowPlaneData : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        List<PlaneData> planeDataList = GetLocation.instance.planeDataList;
+        List<PlaneData> planeDataList = GlobalData.planeDataList;
 
         Debug.Log(planeDataList.Count);
         planeDataText.text = "Plane Data:\n";

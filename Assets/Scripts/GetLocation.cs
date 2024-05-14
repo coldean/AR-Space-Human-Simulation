@@ -26,29 +26,14 @@ public class GetLocation : MonoBehaviour
         }
     }
     */
-    public static GetLocation instance; // 싱글톤 패턴을 사용하여 인스턴스를 전역적으로 접근 가능하도록 설정
 
     public ARPlaneManager planeManager;
-    public List<PlaneData> planeDataList;
 
-    void Awake()
-    {
-        if (instance == null)
-        {
-            instance = this;
-            DontDestroyOnLoad(gameObject); // 현재 게임 오브젝트를 파괴되지 않도록 설정
-        }
-        else
-        {
-            Destroy(gameObject); // 이미 인스턴스가 존재하면 현재 게임 오브젝트를 파괴
-        }
-    }
 
     void Start()
     {
         planeManager = GetComponent<ARPlaneManager>();
         planeManager.planesChanged += OnPlanesChanged;
-        planeDataList = new List<PlaneData>();
     }
 
     void OnPlanesChanged(ARPlanesChangedEventArgs eventArgs)
@@ -69,7 +54,7 @@ public class GetLocation : MonoBehaviour
             };
             Debug.Log($"Plane position:{planeData.Position}, Plane size: {planeData.Size}");
 
-            planeDataList.Add(planeData);
+            GlobalData.planeDataList.Add(planeData);
             // Plane 데이터 직렬화
             //string serializedPlaneData = JsonUtility.ToJson(planeData);
 
