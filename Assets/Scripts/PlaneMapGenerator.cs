@@ -55,7 +55,14 @@ public class PlaneMapGenerator : MonoBehaviour
                 {
                     if (x >= 0 && x < mapWidth && y >= 0 && y < mapHeight)
                     {
-                        planeTexture.SetPixel(x, y, Color.grey); // 평면인 경우 회색으로 채우기
+                        if (y == texY - planeHeight / 2 || y == texY + planeHeight / 2 || x == texX - planeWidth / 2 || x == texX + planeWidth / 2)
+                        {
+                            planeTexture.SetPixel(x, y, Color.red); // 테두리는 빨간색으로 채우기
+                        }
+                        else
+                        {
+                            planeTexture.SetPixel(x, y, Color.grey); // 내부는 회색으로 채우기
+                        }
                     }
                 }
             }
