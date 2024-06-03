@@ -24,7 +24,7 @@ public class RandomPersonPlacer : MonoBehaviour
     void Update()
     {
         // Update를 통해 평면을 감지하고 무작위로 'Person' 오브젝트를 배치하는 기능을 실행합니다.
-        if (arPlaneManager.trackables.count > 0 && personPrefab != null)
+        if (arPlaneManager.trackables.count > 0 && personPrefab != null && GlobalData.showPerson)
         {
             SpawnPersons();
         }
@@ -50,7 +50,11 @@ public class RandomPersonPlacer : MonoBehaviour
                     {
                         Instantiate(personPrefab, planePosition, Quaternion.identity);
                         alreadySpawned++;
-                        if (alreadySpawned >= totalPersons) break; // 생성할 'Person'의 총 수를 초과하지 않도록 함.
+                        if (alreadySpawned >= totalPersons)
+                        {
+                            GlobalData.showPerson = false;
+                            break; // 생성할 'Person'의 총 수를 초과하지 않도록 함.
+                        }
                     }
                 }
             }
