@@ -2,6 +2,9 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using UnityEngine.UI;
+using UnityEngine.XR.ARFoundation;
+
 
 public class ButtonManager : MonoBehaviour
 {
@@ -19,4 +22,5 @@ public class ButtonManager : MonoBehaviour
     {
         Application.Quit();
     }
+
 }

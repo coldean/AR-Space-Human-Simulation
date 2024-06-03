@@ -4,6 +4,7 @@ using UnityEngine;
 using UnityEngine.XR.ARFoundation;
 using Structures;
 
+
 public class GetLocation : MonoBehaviour
 {
     /*
@@ -34,6 +35,7 @@ public class GetLocation : MonoBehaviour
     {
         planeManager = GetComponent<ARPlaneManager>();
         planeManager.planesChanged += OnPlanesChanged;
+
     }
 
     void OnPlanesChanged(ARPlanesChangedEventArgs eventArgs)
