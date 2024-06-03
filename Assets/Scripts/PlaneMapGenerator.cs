@@ -5,10 +5,10 @@ using UnityEngine.XR.ARFoundation;
 using Structures;
 public class PlaneMapGenerator : MonoBehaviour
 {
-    public RawImage planeMapImage; // UIï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ Ç¥ï¿½ï¿½ï¿½ï¿½ RawImage
-    public int mapWidth = Screen.width; // ï¿½Ø½ï¿½Ã³ ï¿½Êºï¿½
-    public int mapHeight = Screen.height; // ï¿½Ø½ï¿½Ã³ ï¿½ï¿½ï¿½ï¿½
-    public float mapScale = 200.0f; // ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½Ç¥ï¿½è¿¡ï¿½ï¿½ ï¿½Ø½ï¿½Ã³ ï¿½ï¿½Ç¥ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
+    public RawImage planeMapImage; // UI¿¡¼­ °á°ú¸¦ Ç¥½ÃÇÒ RawImage
+    public int mapWidth = Screen.width; // ÅØ½ºÃ³ ³Êºñ
+    public int mapHeight = Screen.height; // ÅØ½ºÃ³ ³ôÀÌ
+    public float mapScale = 200.0f; // ¿ùµå ÁÂÇ¥°è¿¡¼­ ÅØ½ºÃ³ ÁÂÇ¥°è·ÎÀÇ ½ºÄÉÀÏ
 
     public Texture2D planeTexture;
 
@@ -17,36 +17,40 @@ public class PlaneMapGenerator : MonoBehaviour
         planeMapImage.gameObject.SetActive(false);
     }
     public void OnclickMap()
-    { 
+    {
         planeTexture = new Texture2D(mapWidth, mapHeight);
         planeMapImage.texture = planeTexture;
 
-        // 2D ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
+        // 2D ¸ÊÀ» °»½Å
         UpdatePlaneMap();
     }
-
+    
+    public void OnclickBack()
+    {
+        GlobalData.planeDataList.Clear(); // Æò¸é Á¤º¸ ÃÊ±âÈ­, ´Ù½Ã ½ºÄµÇÏ±â À§ÇÔ 
+        planeMapImage.gameObject.SetActive(false);
+    }
     public void UpdatePlaneMap()
     {
-        // ï¿½Ø½ï¿½Ã³ ï¿½Ê±ï¿½È­
+        // ÅØ½ºÃ³ ÃÊ±âÈ­
         
         Color32[] resetColorArray = new Color32[planeTexture.width * planeTexture.height];
 
         for (int i = 0; i < resetColorArray.Length; i++)
         {
-            resetColorArray[i] = Color.white; // ï¿½Ê±ï¿½È­ ï¿½ï¿½ ï¿½Ï¾ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ Ã¤ï¿½ï¿½ï¿½
+            resetColorArray[i] = Color.white; // ÃÊ±âÈ­ ½Ã ÇÏ¾ç»öÀ¸·Î Ã¤¿ì±â
         }
         planeTexture.SetPixels32(resetColorArray);
-        
-       // GenerateRandomPlaneData(3);
+        planeTexture.Apply();
+        //GenerateRandomPlaneData(3);
         List<PlaneData> planeDataList = GlobalData.planeDataList;
-
-        // ï¿½ï¿½ ï¿½Ã·ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½Ê¿ï¿½ ï¿½×¸ï¿½ï¿½ï¿½
+        // °¢ ÇÃ·¹ÀÎÀ» ¸Ê¿¡ ±×¸®±â
         foreach (var planeData in planeDataList)
         {
-            // ï¿½Ù´Ú¸ï¿½ ï¿½ß½ï¿½ï¿½ï¿½ ï¿½Ø½ï¿½Ã³ ï¿½ï¿½Ç¥ï¿½ï¿½ï¿½ ï¿½ï¿½È¯
+            // ¹Ù´Ú¸é Áß½ÉÀ» ÅØ½ºÃ³ ÁÂÇ¥°è·Î º¯È¯
             int texX = (int)(planeData.Position.x * mapScale) + (mapWidth / 2);
             int texY = (int)(planeData.Position.z * mapScale) + (mapHeight / 2);
-            // ï¿½Ù´Ú¸ï¿½ï¿½ï¿½ Å©ï¿½ï¿½
+            // ¹Ù´Ú¸éÀÇ Å©±â
             int planeWidth = (int)(planeData.Size.x * mapScale);
             int planeHeight = (int)(planeData.Size.y * mapScale);
             for (int y = texY - planeHeight / 2; y <= texY + planeHeight / 2; y++)
@@ -55,25 +59,17 @@ public class PlaneMapGenerator : MonoBehaviour
                 {
                     if (x >= 0 && x < mapWidth && y >= 0 && y < mapHeight)
                     {
-                        if (y == texY - planeHeight / 2 || y == texY + planeHeight / 2 || x == texX - planeWidth / 2 || x == texX + planeWidth / 2)
-                        {
-                            planeTexture.SetPixel(x, y, Color.red); // ï¿½×µÎ¸ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ Ã¤ï¿½ï¿½ï¿½
-                        }
-                        else
-                        {
-                            planeTexture.SetPixel(x, y, Color.grey); // ï¿½ï¿½ï¿½Î´ï¿½ È¸ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ Ã¤ï¿½ï¿½ï¿½
-                        }
+                        planeTexture.SetPixel(x, y, Color.grey); // Æò¸éÀÎ °æ¿ì È¸»öÀ¸·Î Ã¤¿ì±â
                     }
                 }
             }
         }
-
-        // ï¿½Ø½ï¿½Ã³ ï¿½ï¿½ï¿½ï¿½
+        // ÅØ½ºÃ³ Àû¿ë
         planeTexture.Apply();
         planeMapImage.gameObject.SetActive(true);
     }
 
-    // plane ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½Ö±ï¿½
+    // plane Á¤º¸ ·£´ýÀ¸·Î ³Ö±â
    /*
     public void GenerateRandomPlaneData(int count)
     {
@@ -82,19 +78,20 @@ public class PlaneMapGenerator : MonoBehaviour
             PlaneData planeD = new PlaneData
             {
                 Position = new Vector3(
-                    Random.Range(-10, 10), // X ï¿½ï¿½Ç¥
+                    Random.Range(-10, 10), // X ÁÂÇ¥
                     0,
-                    Random.Range(-10, 10)  // Z ï¿½ï¿½Ç¥
+                    Random.Range(-10, 10)  // Z ÁÂÇ¥
                 ),
                 Size = new Vector2(
-                    Random.Range(0.5f, 10.0f),  // Width
-                    Random.Range(0.5f, 10.0f)   // Height
+                    Random.Range(0.5f, 5.0f),  // Width
+                    Random.Range(0.5f, 5.0f)   // Height
                 )
             };
             GlobalData.planeDataList.Add(planeD);
         }
     }
-    */
+   */
+    
 
 }
 
