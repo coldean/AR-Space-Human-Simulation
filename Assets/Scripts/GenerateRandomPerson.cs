@@ -11,7 +11,8 @@ public class RandomPersonPlacer : MonoBehaviour
     public ARPlaneManager arPlaneManager;
     public GameObject personPrefab;
     public List<LocationProbability> locations; // 사용자 입력 위치 및 확률 정보.
-    public int totalPersons = 100; // 전체 생성할 'Person' 수.
+    public int totalPersons = 10; // 전체 생성할 'Person' 수.
+    private bool hasSpawned = false; // Person이 생성됐는지 여부를 추적하는 플래그.
 
     void Start()
     {
@@ -24,9 +25,15 @@ public class RandomPersonPlacer : MonoBehaviour
     void Update()
     {
         // Update를 통해 평면을 감지하고 무작위로 'Person' 오브젝트를 배치하는 기능을 실행합니다.
-        if (arPlaneManager.trackables.count > 0 && personPrefab != null && GlobalData.showPerson)
+        if (arPlaneManager.trackables.count > 0 && personPrefab != null && GlobalData.showPerson && !hasSpawned)
         {
-            SpawnPersons();
+            Debug.Log("\n\n\n\n generate on \n\n\n\n\n");
+            Debug.Log(GlobalData.locations[0].probability);
+            SpawnPersons();          // Debug Log
+        }
+        else if (personPrefab == null)
+        {
+            Debug.LogError("personPrefab이 할당되지 않았습니다. personPrefab을 확인하세요.");
         }
     }
 
@@ -34,7 +41,6 @@ public class RandomPersonPlacer : MonoBehaviour
     {
         // 이미 생성된 Person의 수를 계산.
         int alreadySpawned = CountSpawnedPersons();
-
         // 전체 생성할 'Person' 수에서 이미 생성된 수를 뺀 만큼 반복.
         while (alreadySpawned < totalPersons)
         {
@@ -48,11 +54,14 @@ public class RandomPersonPlacer : MonoBehaviour
                     Vector3 planePosition = GetRandomPointInPlane(randomPosition);
                     if (planePosition != Vector3.zero)
                     {
+                        Debug.Log($"Spawned at: {planePosition}"); // Debug Log                            
                         Instantiate(personPrefab, planePosition, Quaternion.identity);
                         alreadySpawned++;
                         if (alreadySpawned >= totalPersons)
                         {
                             GlobalData.showPerson = false;
+                            Debug.Log(alreadySpawned);
+                            hasSpawned = true; // Person이 생성됐음을 표시.
                             break; // 생성할 'Person'의 총 수를 초과하지 않도록 함.
                         }
                     }
