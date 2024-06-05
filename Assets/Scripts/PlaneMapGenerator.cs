@@ -60,7 +60,15 @@ public class PlaneMapGenerator : MonoBehaviour
                 {
                     if (x >= 0 && x < mapWidth && y >= 0 && y < mapHeight)
                     {
-                        planeTexture.SetPixel(x, y, Color.grey); // ����� ��� ȸ������ ä���
+                        // planeTexture.SetPixel(x, y, Color.grey); // ����� ��� ȸ������ ä���
+                        if (y == texY - planeHeight / 2 || y == texY + planeHeight / 2 || x == texX - planeWidth / 2 || x == texX + planeWidth / 2)
+                        {
+                            planeTexture.SetPixel(x, y, Color.red); // �׵θ��� ���������� ä���
+                        }
+                        else
+                        {
+                            planeTexture.SetPixel(x, y, Color.grey); // ���δ� ȸ������ ä���
+                        }
                     }
                 }
             }
