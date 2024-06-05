@@ -6,6 +6,7 @@ using Structures;
 public class PlaneMapGenerator : MonoBehaviour
 {
     public RawImage planeMapImage; // UI���� ����� ǥ���� RawImage
+    public ARPlaneManager arPlaneManager;
     public int mapWidth = Screen.width; // �ؽ�ó �ʺ�
     public int mapHeight = Screen.height; // �ؽ�ó ����
     public float mapScale = 200.0f; // ���� ��ǥ�迡�� �ؽ�ó ��ǥ����� ������
@@ -15,6 +16,10 @@ public class PlaneMapGenerator : MonoBehaviour
     private void Awake()
     {
         planeMapImage.gameObject.SetActive(false);
+        if (arPlaneManager == null)
+        {
+            arPlaneManager = FindObjectOfType<ARPlaneManager>();
+        }
     }
     public void OnclickMap()
     {
@@ -30,6 +35,8 @@ public class PlaneMapGenerator : MonoBehaviour
         //GlobalData.planeDataList.Clear(); // ��� ���� �ʱ�ȭ, �ٽ� ��ĵ�ϱ� ����
         GlobalData.showPerson = true;
         planeMapImage.gameObject.SetActive(false);
+        arPlaneManager.enabled = false;
+
     }
     public void UpdatePlaneMap()
     {
