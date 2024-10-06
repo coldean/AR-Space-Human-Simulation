@@ -49,8 +49,12 @@ public class RandomPersonPlacer : MonoBehaviour
                 // 각 위치의 확률을 체크하여 'Person' 생성 여부 결정.
                 if (Random.value <= locProb.probability)
                 {
-                    // 확률에 따라 'Person' 생성.
-                    Vector3 randomPosition = locProb.location + Random.insideUnitSphere * 2.0f; // 위치 근처에서의 분포 반경.
+                    // 무작위 분포 반경으로 X와 Z 좌표 모두 생성.
+                    Vector3 randomPosition = locProb.location + new Vector3(
+                        Random.Range(-2.0f, 2.0f), // X축의 랜덤 값
+                        0,                         // Y축은 평면에 고정
+                        Random.Range(-2.0f, 2.0f)  // Z축의 랜덤 값
+                    );
                     Vector3 planePosition = GetRandomPointInPlane(randomPosition);
                     if (planePosition != Vector3.zero)
                     {
@@ -92,6 +96,7 @@ public class RandomPersonPlacer : MonoBehaviour
             if (selectedPlane.boundary.Contains(new Vector2(randomPosition.x, randomPosition.z)))
             {
                 // 평면 위의 y 좌표를 사용하여 위치를 조정합니다.
+                Debug.Log($"returned at: {randomPosition}"); // Debug Log                            
                 return new Vector3(randomPosition.x, selectedPlane.transform.position.y, randomPosition.z);
             }
         }
@@ -100,11 +105,20 @@ public class RandomPersonPlacer : MonoBehaviour
         Vector3 center = selectedPlane.center;
         Vector3 extents = selectedPlane.extents;
 
+
+        Debug.Log($"\n\n\n\n\nextents\n\n\n\n\n\n: {extents}"); // Debug Log                            
+
+        //float randomX = Random.Range(center.x - extents.x / 2, center.x + extents.x / 2);
+        //float randomy = Random.Range(center.y - extents.y / 2, center.y + extents.y / 2);
+        //float randomZ = Random.Range(center.z - extents.z / 2, center.z + extents.z / 2);
+
+        // 무작위 X, Z 좌표를 생성할 때 더 넓은 범위를 사용하여 Z 좌표가 고정되지 않도록 조정합니다.
         float randomX = Random.Range(center.x - extents.x, center.x + extents.x);
         float randomZ = Random.Range(center.z - extents.z, center.z + extents.z);
 
         // 평면 위의 y 좌표를 사용하여 위치를 조정합니다.
         return new Vector3(randomX, selectedPlane.transform.position.y, randomZ);
+        //return new Vector3(randomX, randomy, randomZ);
     }
 
     int CountSpawnedPersons()

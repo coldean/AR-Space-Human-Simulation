@@ -7,6 +7,7 @@ public class GlobalData
 {
     public static List<PlaneData> planeDataList = new List<PlaneData>();
     public static List<LocationProbability> locations = new List<LocationProbability>();
+    public static List<Vector3> touchPositions = new List<Vector3>();   // save touched positions here
     public static bool showPerson = false;
 
     static GlobalData()
