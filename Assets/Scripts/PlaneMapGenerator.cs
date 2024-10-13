@@ -85,30 +85,78 @@ public class PlaneMapGenerator : MonoBehaviour
         planeTexture.Apply();
         planeMapImage.gameObject.SetActive(true);
     }
-
-    // plane ���� �������� �ֱ�
-   /*
-    public void GenerateRandomPlaneData(int count)
+    private void Update()
     {
-        for (int i = 0; i < count; i++)
+        if (planeTexture == null)
         {
-            PlaneData planeD = new PlaneData
+            return;
+        }
+
+        // 터치 입력 처리 (모바일)
+        if (Input.touchCount > 0)
+        {
+            Touch touch = Input.GetTouch(0);
+
+            if (touch.phase == TouchPhase.Began) // 터치 시작
             {
-                Position = new Vector3(
-                    Random.Range(-10, 10), // X ��ǥ
-                    0,
-                    Random.Range(-10, 10)  // Z ��ǥ
-                ),
-                Size = new Vector2(
-                    Random.Range(0.5f, 5.0f),  // Width
-                    Random.Range(0.5f, 5.0f)   // Height
-                )
-            };
-            GlobalData.planeDataList.Add(planeD);
+                Vector2 touchPos = touch.position;
+
+                // 터치한 좌표가 이미지 영역 내에 있는지 확인
+                if (RectTransformUtility.RectangleContainsScreenPoint(planeMapImage.rectTransform, touchPos))
+                {
+                    // 터치한 좌표를 텍스처 좌표로 변환
+                    int texX = (int)touchPos.x;
+                    int texY = (int)touchPos.y;
+
+                    if (texX >= 0 && texX < mapWidth && texY >= 0 && texY < mapHeight)
+                    {
+                        // 터치한 위치의 좌표를 planeTexture에서 가져옴
+                        Color pixelColor = planeTexture.GetPixel(texX, texY);
+
+                        // 평면인 곳(회색)을 터치했는지 확인
+                        if (pixelColor == Color.grey)
+                        {
+                            // 텍스처 좌표를 월드 좌표로 변환
+                            Vector3 worldPos = new Vector3((texX - mapWidth / 2) / mapScale, 0, (texY - mapHeight / 2) / mapScale);
+
+                            // 좌표를 GlobalData의 touchPositions 리스트에 추가
+                            GlobalData.touchPositions.Add(worldPos);
+
+                        }
+                    }
+                }
+            }
         }
     }
-   */
-    
 
-}
+
+
+
+
+    // plane ���� �������� �ֱ�
+
+   /*
+    public void GenerateRandomPlaneData(int count)
+         {
+             for (int i = 0; i < count; i++)
+             {
+                 PlaneData planeD = new PlaneData
+                 {
+                     Position = new Vector3(
+                         Random.Range(-10, 10), // X ��ǥ
+                         0,
+                         Random.Range(-10, 10)  // Z ��ǥ
+                     ),
+                     Size = new Vector2(
+                         Random.Range(0.5f, 5.0f),  // Width
+                         Random.Range(0.5f, 5.0f)   // Height
+                     )
+                 };
+                 GlobalData.planeDataList.Add(planeD);
+             }
+         }
+    */    
+
+
+    }
 
