@@ -104,17 +104,20 @@ public class PlaneMapGenerator : MonoBehaviour
                 // 터치한 좌표가 이미지 영역 내에 있는지 확인
                 if (RectTransformUtility.RectangleContainsScreenPoint(planeMapImage.rectTransform, touchPos))
                 {
-                    // 터치한 좌표를 텍스처 좌표로 변환
-                    int texX = (int)touchPos.x;
-                    int texY = (int)touchPos.y;
+                    // 화면 좌표를 이미지의 로컬 좌표로 변환
+                    RectTransformUtility.ScreenPointToLocalPointInRectangle(planeMapImage.rectTransform, touchPos, null, out Vector2 localPoint);
 
-                    if (texX >= 0 && texX < mapWidth && texY >= 0 && texY < mapHeight)
+                    // 로컬 좌표를 텍스처 좌표로 변환
+                    int texX = (int)((localPoint.x + (planeMapImage.rectTransform.rect.width / 2)) * (planeTexture.width / planeMapImage.rectTransform.rect.width));
+                    int texY = (int)((-localPoint.y + (planeMapImage.rectTransform.rect.height / 2)) * (planeTexture.height / planeMapImage.rectTransform.rect.height));
+
+                    // 텍스처 좌표가 유효한지 확인
+                    if (texX >= 0 && texX < planeTexture.width && texY >= 0 && texY < planeTexture.height)
                     {
                         // 터치한 위치의 좌표를 planeTexture에서 가져옴
-                        Color pixelColor = planeTexture.GetPixel(texX, texY);
+                        Color pixelColor = planeTexture.GetPixel((int)texX, (int)texY);
 
-                        // 평면인 곳(회색)을 터치했는지 확인
-                        if (pixelColor == Color.grey)
+                        //  if (pixelColor == Color.grey)
                         {
                             // 텍스처 좌표를 월드 좌표로 변환
                             Vector3 worldPos = new Vector3((texX - mapWidth / 2) / mapScale, 0, (texY - mapHeight / 2) / mapScale);
@@ -135,28 +138,28 @@ public class PlaneMapGenerator : MonoBehaviour
 
     // plane ���� �������� �ֱ�
 
-   /*
-    public void GenerateRandomPlaneData(int count)
-         {
-             for (int i = 0; i < count; i++)
-             {
-                 PlaneData planeD = new PlaneData
-                 {
-                     Position = new Vector3(
-                         Random.Range(-10, 10), // X ��ǥ
-                         0,
-                         Random.Range(-10, 10)  // Z ��ǥ
-                     ),
-                     Size = new Vector2(
-                         Random.Range(0.5f, 5.0f),  // Width
-                         Random.Range(0.5f, 5.0f)   // Height
-                     )
-                 };
-                 GlobalData.planeDataList.Add(planeD);
-             }
-         }
-    */    
+    /*
+     public void GenerateRandomPlaneData(int count)
+          {
+              for (int i = 0; i < count; i++)
+              {
+                  PlaneData planeD = new PlaneData
+                  {
+                      Position = new Vector3(
+                          Random.Range(-10, 10), // X ��ǥ
+                          0,
+                          Random.Range(-10, 10)  // Z ��ǥ
+                      ),
+                      Size = new Vector2(
+                          Random.Range(0.5f, 5.0f),  // Width
+                          Random.Range(0.5f, 5.0f)   // Height
+                      )
+                  };
+                  GlobalData.planeDataList.Add(planeD);
+              }
+          }
+     */
 
 
-    }
+}
 
