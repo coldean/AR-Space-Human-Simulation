@@ -124,7 +124,8 @@ public class PlaneMapGenerator : MonoBehaviour
 
                             // 좌표를 GlobalData의 touchPositions 리스트에 추가
                             GlobalData.touchPositions.Add(worldPos);
-
+                            Debug.Log("added touchPositions");
+                            Debug.Log(worldPos);
                         }
                     }
                 }

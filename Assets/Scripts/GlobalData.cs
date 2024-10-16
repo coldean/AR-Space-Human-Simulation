@@ -42,21 +42,32 @@ public class GlobalData
     public static List<Vector3> touchPositions = new List<Vector3>();   // save touched positions here
     public static bool showPerson = false;
 
+
     static GlobalData()
     {
         // 무작위 LocationProbability 값 2개 생성
-        locations.Add(new LocationProbability
-        {
-            location = new Vector3(Random.Range(-10f, 10f), 0, Random.Range(-10f, 10f)),
-            probability = Random.Range(0f, 1f),
-            count = Random.Range(1, 10) // 필요 시 수정
-        });
+        //locations.Add(new LocationProbability
+        //{
+        //    location = new Vector3(Random.Range(-10f, 10f), 0, Random.Range(-10f, 10f)),
+        //    probability = Random.Range(0f, 1f),
+        //    count = Random.Range(1, 10) // 필요 시 수정
+        //});
 
-        locations.Add(new LocationProbability
-        {
-            location = new Vector3(Random.Range(-10f, 10f), 0, Random.Range(-10f, 10f)),
-            probability = Random.Range(0f, 1f),
-            count = Random.Range(1, 10) // 필요 시 수정
-        });
+        //locations.Add(new LocationProbability
+        //{
+        //    location = new Vector3(Random.Range(-10f, 10f), 0, Random.Range(-10f, 10f)),
+        //    probability = Random.Range(0f, 1f),
+        //    count = Random.Range(1, 10) // 필요 시 수정
+        //});
+
+        //foreach (Vector3 touchPosition in touchPositions)
+        //{
+        //    locations.Add(new LocationProbability
+        //    {
+        //        location = touchPosition,
+        //        probability = Random.Range(0f, 1f), // 무작위로 설정
+        //        count = Random.Range(1, 10) // 무작위로 설정 (추후 제거 가능)
+        //    });
+        //}
     }
 }

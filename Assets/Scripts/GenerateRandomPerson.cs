@@ -20,6 +20,8 @@ public class RandomPersonPlacer : MonoBehaviour
         {
             arPlaneManager = FindObjectOfType<ARPlaneManager>();
         }
+        locations.Clear();
+        getLocationInfo();
     }
 
     void Update()
@@ -28,7 +30,8 @@ public class RandomPersonPlacer : MonoBehaviour
         if (arPlaneManager.trackables.count > 0 && personPrefab != null && GlobalData.showPerson && !hasSpawned)
         {
             Debug.Log("\n\n\n\n generate on \n\n\n\n\n");
-            Debug.Log(GlobalData.locations[0].probability);
+            //Debug.Log(GlobalData.locations[0].probability);
+            Debug.Log(locations[0].probability);
             SpawnPersons();          // Debug Log
         }
         else if (personPrefab == null)
@@ -44,7 +47,8 @@ public class RandomPersonPlacer : MonoBehaviour
         // 전체 생성할 'Person' 수에서 이미 생성된 수를 뺀 만큼 반복.
         while (alreadySpawned < totalPersons)
         {
-            foreach (var locProb in GlobalData.locations)
+            //foreach (var locProb in GlobalData.locations)
+            foreach (var locProb in locations)
             {
                 // 각 위치의 확률을 체크하여 'Person' 생성 여부 결정.
                 if (Random.value <= locProb.probability)
@@ -119,5 +123,21 @@ public class RandomPersonPlacer : MonoBehaviour
     {
         // 현재까지 생성된 'Person'의 수를 계산.
         return GameObject.FindGameObjectsWithTag("Person").Length; // 'Person' 프리팹에 "Person" 태그가 지정되어 있어야 함.
+    }
+
+    void getLocationInfo()
+    {
+        Debug.Log("getLocationInfo started");
+        foreach (Vector3 touchPosition in GlobalData.touchPositions)
+        {
+            Debug.Log("Touched position: " + touchPosition);
+
+            locations.Add(new LocationProbability
+            {
+                location = touchPosition,
+                probability = Random.Range(0f, 1f), // 무작위로 설정
+                count = Random.Range(1, 10) // 무작위로 설정 (추후 제거 가능)
+            });
+        }
     }
 }
