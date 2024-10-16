@@ -13,6 +13,7 @@ public class RandomPersonPlacer : MonoBehaviour
     public List<LocationProbability> locations; // 사용자 입력 위치 및 확률 정보.
     public int totalPersons = 10; // 전체 생성할 'Person' 수.
     private bool hasSpawned = false; // Person이 생성됐는지 여부를 추적하는 플래그.
+    private bool infoLoaded = false; // getLocationInfo 호출 여부를 추적하는 플래그
 
     void Start()
     {
@@ -20,26 +21,37 @@ public class RandomPersonPlacer : MonoBehaviour
         {
             arPlaneManager = FindObjectOfType<ARPlaneManager>();
         }
+        locations = new List<LocationProbability>();
         locations.Clear();
         getLocationInfo();
     }
 
     void Update()
     {
-        // Update를 통해 평면을 감지하고 무작위로 'Person' 오브젝트를 배치하는 기능을 실행합니다.
+        // 터치 좌표가 추가된 후, GlobalData의 touchPositions에 값이 있는지 확인
+        if (GlobalData.touchPositions.Count > 0 && !infoLoaded)
+        {
+            getLocationInfo(); // 터치 좌표가 추가된 후 정보 가져오기
+            infoLoaded = true; // 정보가 한 번만 로드되도록 설정
+        }
+
+        // 평면이 감지되었고 Person 생성 조건이 만족되면 Person을 배치
         if (arPlaneManager.trackables.count > 0 && personPrefab != null && GlobalData.showPerson && !hasSpawned)
         {
-            Debug.Log("\n\n\n\n generate on \n\n\n\n\n");
-            //Debug.Log(GlobalData.locations[0].probability);
-            Debug.Log(locations[0].probability);
-            SpawnPersons();          // Debug Log
+            if (locations.Count > 0)
+            {
+                SpawnPersons();
+            }
+            else
+            {
+                Debug.LogWarning("locations 리스트가 비어있습니다. 터치 좌표가 입력되지 않았습니다.");
+            }
         }
         else if (personPrefab == null)
         {
             Debug.LogError("personPrefab이 할당되지 않았습니다. personPrefab을 확인하세요.");
         }
     }
-
     void SpawnPersons()
     {
         // 이미 생성된 Person의 수를 계산.
@@ -128,6 +140,13 @@ public class RandomPersonPlacer : MonoBehaviour
     void getLocationInfo()
     {
         Debug.Log("getLocationInfo started");
+
+        if (GlobalData.touchPositions.Count == 0)
+        {
+            Debug.LogWarning("GlobalData.touchPositions 리스트가 비어있습니다. 터치된 좌표가 없습니다.");
+            return;
+        }
+
         foreach (Vector3 touchPosition in GlobalData.touchPositions)
         {
             Debug.Log("Touched position: " + touchPosition);
@@ -135,7 +154,7 @@ public class RandomPersonPlacer : MonoBehaviour
             locations.Add(new LocationProbability
             {
                 location = touchPosition,
-                probability = Random.Range(0f, 1f), // 무작위로 설정
+                probability = Random.Range(0f, 0.01f), // 무작위로 설정
                 count = Random.Range(1, 10) // 무작위로 설정 (추후 제거 가능)
             });
         }

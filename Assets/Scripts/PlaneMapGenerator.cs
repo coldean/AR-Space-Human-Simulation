@@ -123,8 +123,7 @@ public class PlaneMapGenerator : MonoBehaviour
                             Vector3 worldPos = new Vector3((texX - mapWidth / 2) / mapScale, 0, (texY - mapHeight / 2) / mapScale);
 
                             // 좌표를 GlobalData의 touchPositions 리스트에 추가
-                            GlobalData.touchPositions.Add(worldPos);
-                            Debug.Log("added touchPositions");
+                            GlobalData.AddTouchPosition(worldPos);
                             Debug.Log(worldPos);
                         }
                     }

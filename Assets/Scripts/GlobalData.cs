@@ -39,8 +39,30 @@ public class GlobalData
 {
     public static List<PlaneData> planeDataList = new List<PlaneData>();
     public static List<LocationProbability> locations = new List<LocationProbability>();
-    public static List<Vector3> touchPositions = new List<Vector3>();   // save touched positions here
     public static bool showPerson = false;
+
+    // private 리스트, 직접 접근을 막고 property를 통해 접근
+    private static List<Vector3> _touchPositions = new List<Vector3>();
+
+    // Property로 touchPositions 리스트에 접근
+    public static List<Vector3> touchPositions
+    {
+        get { return _touchPositions; }
+        set
+        {
+            _touchPositions = value;
+            Debug.Log("touchPositions 리스트가 업데이트되었습니다.");
+        }
+    }
+
+    // touchPositions에 새 좌표 추가 시 로그 출력
+    public static void AddTouchPosition(Vector3 newPosition)
+    {
+        _touchPositions.Add(newPosition);
+        Debug.Log("added new touchPosition: " + newPosition);
+        Debug.Log("touchPositions size" + _touchPositions.Count);
+    }
+
 
 
     static GlobalData()
