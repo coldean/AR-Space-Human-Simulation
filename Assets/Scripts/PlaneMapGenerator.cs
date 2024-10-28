@@ -127,6 +127,8 @@ public class PlaneMapGenerator : MonoBehaviour
                             Vector3 worldPos = new Vector3((texX - mapWidth / 2) / mapScale, 0, (texY - mapHeight / 2) / mapScale);
                             InputPanel.SetActive(true);
                             planeMapImage.gameObject.SetActive(false);
+
+                            Debug.Log("planeMapGenerator position : " + worldPos);
                             // 좌표를 GlobalData의 touchPositions 리스트에 추가
                             GlobalData.AddTouchPosition(worldPos);
                             Debug.Log(worldPos);

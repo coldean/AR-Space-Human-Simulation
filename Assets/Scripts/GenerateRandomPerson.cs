@@ -52,43 +52,129 @@ public class RandomPersonPlacer : MonoBehaviour
             Debug.LogError("personPrefab이 할당되지 않았습니다. personPrefab을 확인하세요.");
         }
     }
-    void SpawnPersons()
+    //void SpawnPersons()
+    //{
+    //    // 이미 생성된 Person의 수를 계산.
+    //    int alreadySpawned = CountSpawnedPersons();
+    //    // 전체 생성할 'Person' 수에서 이미 생성된 수를 뺀 만큼 반복.
+    //    while (alreadySpawned < totalPersons)
+    //    {
+    //        //foreach (var locProb in GlobalData.locations)
+    //        foreach (var locProb in locations)
+    //        {
+    //            // 각 위치의 확률을 체크하여 'Person' 생성 여부 결정.
+    //            if (Random.value <= locProb.probability)
+    //            {
+    //                // 무작위 분포 반경으로 X와 Z 좌표 모두 생성.
+    //                Vector3 randomPosition = locProb.location + new Vector3(
+    //                    Random.Range(-2.0f, 2.0f), // X축의 랜덤 값
+    //                    0,                         // Y축은 평면에 고정
+    //                    Random.Range(-2.0f, 2.0f)  // Z축의 랜덤 값
+    //                );
+    //                Vector3 planePosition = GetRandomPointInPlane(randomPosition);
+    //                if (planePosition != Vector3.zero)
+    //                {
+    //                    Debug.Log($"Spawned at: {planePosition}"); // Debug Log                            
+    //                    Instantiate(personPrefab, planePosition, Quaternion.identity);
+    //                    alreadySpawned++;
+    //                    if (alreadySpawned >= totalPersons)
+    //                    {
+    //                        GlobalData.showPerson = false;
+    //                        Debug.Log(alreadySpawned);
+    //                        hasSpawned = true; // Person이 생성됐음을 표시.
+    //                        break; // 생성할 'Person'의 총 수를 초과하지 않도록 함.
+    //                    }
+    //                }
+    //            }
+    //        }
+    //    }
+    //}
+
+    //// gpt ver. not working
+    //void SpawnPersons()
+    //{
+    //    // 이미 생성된 Person의 수를 계산.
+    //    int alreadySpawned = CountSpawnedPersons();
+
+    //    // 전체 생성할 'Person' 수에서 이미 생성된 수를 뺀 만큼 반복.
+    //    foreach (var locProb in locations)
+    //    {
+    //        int countToSpawn = Mathf.Min(locProb.count, totalPersons - alreadySpawned);
+    //        if (countToSpawn <= 0) break;
+
+    //        for (int i = 0; i < countToSpawn; i++)
+    //        {
+    //            // 확률에 따라 위치 조정
+    //            float distanceModifier = Mathf.Lerp(10f, 0f, locProb.probability); // 확률에 따라 위치를 멀리 또는 가깝게 생성
+
+    //            Vector3 offset = new Vector3(
+    //                Random.Range(-distanceModifier, distanceModifier),
+    //                0,
+    //                Random.Range(-distanceModifier, distanceModifier)
+    //            );
+
+    //            Vector3 spawnPosition = locProb.location + offset;
+    //            Vector3 planePosition = GetRandomPointInPlane(spawnPosition);
+
+    //            if (planePosition != Vector3.zero)
+    //            {
+    //                Debug.Log($"Spawned at: {planePosition}");
+    //                Instantiate(personPrefab, planePosition, Quaternion.identity);
+    //                alreadySpawned++;
+
+    //                if (alreadySpawned >= totalPersons)
+    //                {
+    //                    GlobalData.showPerson = false;
+    //                    hasSpawned = true;
+    //                    break;
+    //                }
+    //            }
+    //        }
+    //    }
+    //}
+
+    
+    void SpawnPersons() // for debug, z좌표 문제였던 거 같, 반전하니까 얼추 맞으나 정확하지는 않음
     {
+        // 평면이 감지되지 않은 경우 함수 종료
+        ARPlane firstPlane = null;
+        foreach (var plane in arPlaneManager.trackables)
+        {
+            firstPlane = plane;
+            break;
+        }
+
+        if (firstPlane == null)
+        {
+            Debug.LogWarning("No detected planes.");
+            return;
+        }
+
         // 이미 생성된 Person의 수를 계산.
         int alreadySpawned = CountSpawnedPersons();
-        // 전체 생성할 'Person' 수에서 이미 생성된 수를 뺀 만큼 반복.
-        while (alreadySpawned < totalPersons)
+
+        // locations 리스트에 있는 각 위치에서 정확히 하나의 Person을 생성합니다.
+        foreach (var locProb in locations)
         {
-            //foreach (var locProb in GlobalData.locations)
-            foreach (var locProb in locations)
-            {
-                // 각 위치의 확률을 체크하여 'Person' 생성 여부 결정.
-                if (Random.value <= locProb.probability)
-                {
-                    // 무작위 분포 반경으로 X와 Z 좌표 모두 생성.
-                    Vector3 randomPosition = locProb.location + new Vector3(
-                        Random.Range(-2.0f, 2.0f), // X축의 랜덤 값
-                        0,                         // Y축은 평면에 고정
-                        Random.Range(-2.0f, 2.0f)  // Z축의 랜덤 값
-                    );
-                    Vector3 planePosition = GetRandomPointInPlane(randomPosition);
-                    if (planePosition != Vector3.zero)
-                    {
-                        Debug.Log($"Spawned at: {planePosition}"); // Debug Log                            
-                        Instantiate(personPrefab, planePosition, Quaternion.identity);
-                        alreadySpawned++;
-                        if (alreadySpawned >= totalPersons)
-                        {
-                            GlobalData.showPerson = false;
-                            Debug.Log(alreadySpawned);
-                            hasSpawned = true; // Person이 생성됐음을 표시.
-                            break; // 생성할 'Person'의 총 수를 초과하지 않도록 함.
-                        }
-                    }
-                }
-            }
+            if (alreadySpawned >= totalPersons) break;
+
+            // location 위치에 정확히 생성
+            //Vector3 spawnPosition = locProb.location;
+            Vector3 spawnPosition = new Vector3(locProb.location.x, 0, -locProb.location.z);
+
+            // 생성 위치의 높이를 첫 번째 평면의 높이로 맞춤
+            spawnPosition.y = firstPlane.transform.position.y;
+
+            Debug.Log($"Spawned at exact location: {spawnPosition}");
+            Instantiate(personPrefab, spawnPosition, Quaternion.identity);
+            alreadySpawned++;
         }
+
+        hasSpawned = true; // 생성 완료 표시
+        GlobalData.showPerson = false; // 생성 완료 후 showPerson 비활성화
     }
+
+
 
     Vector3 GetRandomPointInPlane(Vector3? specificLocation = null)
     {
@@ -121,7 +207,7 @@ public class RandomPersonPlacer : MonoBehaviour
         Vector3 center = selectedPlane.center;
         Vector3 extents = selectedPlane.extents;
 
-        Debug.Log($"\n\n\n\n\nextents\n\n\n\n\n\n: {extents}"); // Debug Log                            
+        //Debug.Log($"\n\n\n\n\nextents\n\n\n\n\n\n: {extents}"); // Debug Log                            
 
         float randomX = Random.Range(center.x - extents.x / 2, center.x + extents.x / 2);
         float randomZ = Random.Range(center.y - extents.y / 2, center.y + extents.y / 2);
@@ -154,8 +240,8 @@ public class RandomPersonPlacer : MonoBehaviour
             locations.Add(new LocationProbability
             {
                 location = touchPosition,
-                probability = Random.Range(0f, 0.01f), // 무작위로 설정
-                count = Random.Range(1, 10) // 무작위로 설정 (추후 제거 가능)
+                probability = Random.Range(0f, 0.00f), // 무작위로 설정
+                count = Random.Range(1, 1) // 무작위로 설정 (추후 제거 가능)
             });
         }
     }
