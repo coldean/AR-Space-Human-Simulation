@@ -53,7 +53,7 @@ public class PlaneMapGenerator : MonoBehaviour
         }
         planeTexture.SetPixels32(resetColorArray);
         planeTexture.Apply();
-        GenerateRandomPlaneData(3);
+        //GenerateRandomPlaneData(3);
         List<PlaneData> planeDataList = GlobalData.planeDataList;
         // �� �÷����� �ʿ� �׸���
         foreach (var planeData in planeDataList)
@@ -176,7 +176,7 @@ public class PlaneMapGenerator : MonoBehaviour
 
     // plane ���� �������� �ֱ�
 
-    
+    /*
      public void GenerateRandomPlaneData(int count)
           {
               for (int i = 0; i < count; i++)
@@ -196,7 +196,7 @@ public class PlaneMapGenerator : MonoBehaviour
                   GlobalData.planeDataList.Add(planeD);
               }
           }
-     
+     */
 
 
 }
