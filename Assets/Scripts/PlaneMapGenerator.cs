@@ -10,12 +10,15 @@ public class PlaneMapGenerator : MonoBehaviour
     public int mapWidth = Screen.width; // �ؽ�ó �ʺ�
     public int mapHeight = Screen.height; // �ؽ�ó ����
     public float mapScale = 200.0f; // ���� ��ǥ�迡�� �ؽ�ó ��ǥ����� ������
-
+    public GameObject InputPanel;
+    public TMPro.TMP_InputField InputField;
+    public Button InputButton;
     public Texture2D planeTexture;
 
     private void Awake()
     {
         planeMapImage.gameObject.SetActive(false);
+        InputPanel.SetActive(false);
         if (arPlaneManager == null)
         {
             arPlaneManager = FindObjectOfType<ARPlaneManager>();
@@ -50,7 +53,7 @@ public class PlaneMapGenerator : MonoBehaviour
         }
         planeTexture.SetPixels32(resetColorArray);
         planeTexture.Apply();
-        //GenerateRandomPlaneData(3);
+        GenerateRandomPlaneData(3);
         List<PlaneData> planeDataList = GlobalData.planeDataList;
         // �� �÷����� �ʿ� �׸���
         foreach (var planeData in planeDataList)
@@ -120,8 +123,10 @@ public class PlaneMapGenerator : MonoBehaviour
                         //  if (pixelColor == Color.grey)
                         {
                             // 텍스처 좌표를 월드 좌표로 변환
+                            planeTexture.SetPixel((int)touchPos.x, (int)touchPos.y, Color.red);
                             Vector3 worldPos = new Vector3((texX - mapWidth / 2) / mapScale, 0, (texY - mapHeight / 2) / mapScale);
-
+                            InputPanel.SetActive(true);
+                            planeMapImage.gameObject.SetActive(false);
                             // 좌표를 GlobalData의 touchPositions 리스트에 추가
                             GlobalData.AddTouchPosition(worldPos);
                             Debug.Log(worldPos);
@@ -132,13 +137,44 @@ public class PlaneMapGenerator : MonoBehaviour
         }
     }
 
+    public void OnInputDensity()
+    {
+        //InputField.text = "0.1";
+        if (float.TryParse(InputField.text, out float density))
+        {
+            // 밀집도를 사용하여 작업 수행
+            Debug.Log("입력된 밀집도: " + density);
 
+            LocationProbability locationProb = new LocationProbability
+            {
+                location = GlobalData.touchPositions[GlobalData.touchPositions.Count - 1],
+                probability = density,
+                count = 0 // 비워둠
+            };
+            GlobalData.locations.Add(locationProb);
+            InputPanel.SetActive(false);
+            InputField.text = "";
+            planeMapImage.gameObject.SetActive(true);
+        }
+        else
+        {
+            Debug.Log("유효한 밀집도를 입력하세요.");
+        }
+        Debug.Log(GlobalData.locations[0].location);
 
+    }
+
+    public void OnCancelDensity()
+    {
+        InputPanel.SetActive(false);
+        planeMapImage.gameObject.SetActive(true);
+
+    }
 
 
     // plane ���� �������� �ֱ�
 
-    /*
+    
      public void GenerateRandomPlaneData(int count)
           {
               for (int i = 0; i < count; i++)
@@ -158,7 +194,7 @@ public class PlaneMapGenerator : MonoBehaviour
                   GlobalData.planeDataList.Add(planeD);
               }
           }
-     */
+     
 
 
 }
