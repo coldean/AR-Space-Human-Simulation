@@ -192,6 +192,8 @@ public class RandomPersonPlacer : MonoBehaviour
         }
 
         ARPlane selectedPlane = planes[Random.Range(0, planes.Count)]; // random이 아니라 plane 하나를 지정해서 해야할듯, 함수 인자로 넘겨주기?
+        // 상관없을 듯 하다, 사람들 count를 generate 할 때마다 새로 갱신하기 때문에 여기서 생성이 안되어 기록이 안되어도 상관없음. 대신 여기서 return값이
+        // 무조건 좌표라, 무조건 생성되는데...  이 문제는 생각해 봐야 할듯. flag를 만들어서 하는게 가장 직관적이긴 함.
 
         Vector3 randomPosition = specificLocation.Value;
         // 특정 위치가 주어지면 그 위치를 기반으로 평면 내 무작위 위치를 반환합니다.
