@@ -102,18 +102,20 @@ public class RandomPersonPlacer : MonoBehaviour
             int countToSpawn = Mathf.Min(locProb.count, totalPersons - alreadySpawned);
             if (countToSpawn <= 0) break;
 
-            for (int i = 0; i < countToSpawn; i++) // countToSpqwn이 아니라 locProb.count로 해야할듯 /////////////////////////////////////////////
+            //for (int i = 0; i < countToSpawn; i++) // countToSpqwn이 아니라 locProb.count로 해야할듯 /////////////////////////////////////////////
+            for (int i = 0; i < locProb.count; i++) // countToSpqwn이 아니라 locProb.count로 해야할듯 /////////////////////////////////////////////
+
             {
                 // 확률에 따라 위치 조정
-                float distanceModifier = Mathf.Lerp(1f, 0f, locProb.probability); // 확률에 따라 위치를 멀리 또는 가깝게 생성
-                //float distanceModifier = 1f - locProb.probability // 이걸로 진행하면 될듯 /////////////////////////////////////////////////
+                //float distanceModifier = Mathf.Lerp(1f, 0f, locProb.probability); // 확률에 따라 위치를 멀리 또는 가깝게 생성
+                float distanceModifier = (1f - locProb.probability) / 10; // 이걸로 진행하면 될듯 /////////////////////////////////////////////////
 
                 Vector3 offset = new Vector3(
                     Random.Range(-distanceModifier, distanceModifier),
                     0,
                     Random.Range(-distanceModifier, distanceModifier)
                 );
-                Vector3 tempPosition = new Vector3(locProb.location.x, locProb.location.y, locProb.location.z);
+                Vector3 tempPosition = new Vector3(locProb.location.x, locProb.location.y, -locProb.location.z);
                 //Vector3 spawnPosition = locProb.location + offset;
                 Vector3 spawnPosition = tempPosition + offset;
                 Vector3 planePosition = GetRandomPointInPlane(spawnPosition);
@@ -199,13 +201,18 @@ public class RandomPersonPlacer : MonoBehaviour
         // 특정 위치가 주어지면 그 위치를 기반으로 평면 내 무작위 위치를 반환합니다.
         if (specificLocation.HasValue)
         {
+            Debug.Log($"HasValue in: {randomPosition}"); // Debug Lo
             //Vector3 randomPosition = specificLocation.Value;
             if (selectedPlane.boundary.Contains(new Vector2(randomPosition.x, randomPosition.z)))
             {
                 // 평면 위의 y 좌표를 사용하여 위치를 조정합니다.
-                Debug.Log($"returned at: {randomPosition}"); // Debug Log                            
-          봄
+                Debug.Log($"returned at: {randomPosition}"); // Debug Log
+                return randomPosition;
+            }
+        }
+        //봄
         // random 이니까 count 해야 하긴 해서 position 값 줘서 만드는게 맞기는 한듯.
+        return randomPosition;
         return new Vector3(0, 10, 0);
 
         // 내 생각에 밑부분은 필요하지 않은듯 ///////////////////////////
