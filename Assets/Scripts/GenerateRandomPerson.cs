@@ -108,7 +108,7 @@ public class RandomPersonPlacer : MonoBehaviour
             {
                 // 확률에 따라 위치 조정
                 //float distanceModifier = Mathf.Lerp(1f, 0f, locProb.probability); // 확률에 따라 위치를 멀리 또는 가깝게 생성
-                float distanceModifier = (1f - locProb.probability) / 10; // 이걸로 진행하면 될듯 /////////////////////////////////////////////////
+                float distanceModifier = (1f - locProb.probability) / 5; // 이걸로 진행하면 될듯 /////////////////////////////////////////////////
 
                 Vector3 offset = new Vector3(
                     Random.Range(-distanceModifier, distanceModifier),
@@ -138,7 +138,7 @@ public class RandomPersonPlacer : MonoBehaviour
     }
 
 
-    //void SpawnPersons() // for debug, z좌표 문제였던 거 같, 반전하니까 얼추 맞으나 정확하지는 않v
+    //void SpawnPersons() // for debug, z좌표 문제였던 거 같, 반전하니까 얼추 맞으나 정확하지는 않
     //{
     //    // 평면이 감지되지 않은 경우 함수 종료
     //    ARPlane firstPlane = null;
@@ -198,12 +198,13 @@ public class RandomPersonPlacer : MonoBehaviour
         // 무조건 좌표라, 무조건 생성되는데...  이 문제는 생각해 봐야 할듯. flag를 만들어서 하는게 가장 직관적이긴 함.
 
         Vector3 randomPosition = specificLocation.Value;
+        // Vector3 randomPosition = new Vector3(specificLocation.Value.x, selectedPlane.transform.position.y, specificLocation.Value.z); // 이렇게 진행 /////////////////////
         // 특정 위치가 주어지면 그 위치를 기반으로 평면 내 무작위 위치를 반환합니다.
         if (specificLocation.HasValue)
         {
             Debug.Log($"HasValue in: {randomPosition}"); // Debug Lo
             //Vector3 randomPosition = specificLocation.Value;
-            if (selectedPlane.boundary.Contains(new Vector2(randomPosition.x, randomPosition.z)))
+            if (selectedPlane.boundary.Contains(new Vector2(randomPosition.x, randomPosition.z))) // z값 -해야 실행되나? 위쪽에서 z값 반전시켰기 때문에?
             {
                 // 평면 위의 y 좌표를 사용하여 위치를 조정합니다.
                 Debug.Log($"returned at: {randomPosition}"); // Debug Log
@@ -212,7 +213,7 @@ public class RandomPersonPlacer : MonoBehaviour
         }
         //봄
         // random 이니까 count 해야 하긴 해서 position 값 줘서 만드는게 맞기는 한듯.
-        return randomPosition;
+        //return randomPosition;
         return new Vector3(0, 10, 0);
 
         // 내 생각에 밑부분은 필요하지 않은듯 ///////////////////////////
