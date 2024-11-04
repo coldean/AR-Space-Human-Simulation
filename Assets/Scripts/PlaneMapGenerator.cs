@@ -39,6 +39,12 @@ public class PlaneMapGenerator : MonoBehaviour
         GlobalData.showPerson = true;
         planeMapImage.gameObject.SetActive(false);
         arPlaneManager.enabled = false;
+        foreach (LocationProbability locationProb in GlobalData.locations)
+        {
+            Debug.Log("Location: " + locationProb.location);
+            Debug.Log("Probability: " + locationProb.probability);
+            Debug.Log("Count: " + locationProb.count);
+        }
 
     }
     public void UpdatePlaneMap()
