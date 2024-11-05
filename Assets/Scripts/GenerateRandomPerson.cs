@@ -250,16 +250,29 @@ public class RandomPersonPlacer : MonoBehaviour
             return;
         }
 
-        foreach (Vector3 touchPosition in GlobalData.touchPositions)
+        //foreach (Vector3 touchPosition in GlobalData.touchPositions)
+        //{
+        //    Debug.Log("Touched position: " + touchPosition);
+
+        //    locations.Add(new LocationProbability
+        //    {
+        //        location = touchPosition,
+        //        probability = Random.Range(0f, 0.00f), // 무작위로 설정
+        //        count = Random.Range(1, 1) // 무작위로 설정 (추후 제거 가능)
+        //    });
+        //}
+
+        foreach (LocationProbability loc in GlobalData.locations)
         {
-            Debug.Log("Touched position: " + touchPosition);
+            Debug.Log("Touched position: " + loc.location);
 
             locations.Add(new LocationProbability
             {
-                location = touchPosition,
-                probability = Random.Range(0f, 0.00f), // 무작위로 설정
+                location = loc.location,
+                probability = loc.probability,
                 count = Random.Range(1, 1) // 무작위로 설정 (추후 제거 가능)
             });
         }
+        
     }
 }
