@@ -63,6 +63,13 @@ public class GlobalData
         Debug.Log("touchPositions size" + _touchPositions.Count);
     }
 
+    //만들다 말음
+    public static void AddLocations(LocationProbability newPosition)
+    {
+        locations.Add(newPosition);
+        Debug.Log("added new locations: " + newPosition.location);
+        Debug.Log("locations size" + locations.Count);
+    }
 
 
     static GlobalData()

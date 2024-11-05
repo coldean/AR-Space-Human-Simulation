@@ -46,6 +46,7 @@ public class PlaneMapGenerator : MonoBehaviour
             Debug.Log("Count: " + locationProb.count);
         }
 
+        Debug.Log("OnclickBack locations count : " + GlobalData.locations.Count);
     }
     public void UpdatePlaneMap()
     {
@@ -157,9 +158,9 @@ public class PlaneMapGenerator : MonoBehaviour
             {
                 location = GlobalData.touchPositions[GlobalData.touchPositions.Count - 1],
                 probability = density,
-                count = 0 // 비워둠
+                count = 4 // 임시
             };
-            GlobalData.locations.Add(locationProb);
+            GlobalData.AddLocations(locationProb);
             InputPanel.SetActive(false);
             InputField.text = "";
             planeMapImage.gameObject.SetActive(true);
@@ -168,7 +169,8 @@ public class PlaneMapGenerator : MonoBehaviour
         {
             Debug.Log("유효한 밀집도를 입력하세요.");
         }
-        Debug.Log(GlobalData.locations[0].location);
+        Debug.Log("density locations : " + GlobalData.locations[0].location);
+        Debug.Log("locations count : " + GlobalData.locations.Count);
 
     }
 

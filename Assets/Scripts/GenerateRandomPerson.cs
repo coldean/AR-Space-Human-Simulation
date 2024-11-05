@@ -29,7 +29,8 @@ public class RandomPersonPlacer : MonoBehaviour
     void Update()
     {
         // 터치 좌표가 추가된 후, GlobalData의 touchPositions에 값이 있는지 확인
-        if (GlobalData.touchPositions.Count > 0 && !infoLoaded)
+        //if (GlobalData.locations.Count > 0 && !infoLoaded)
+        if (GlobalData.locations.Count > 0 && GlobalData.showPerson && !infoLoaded)
         {
             getLocationInfo(); // 터치 좌표가 추가된 후 정보 가져오기
             infoLoaded = true; // 정보가 한 번만 로드되도록 설정
@@ -198,11 +199,12 @@ public class RandomPersonPlacer : MonoBehaviour
         // 무조건 좌표라, 무조건 생성되는데...  이 문제는 생각해 봐야 할듯. flag를 만들어서 하는게 가장 직관적이긴 함.
 
         //Vector3 randomPosition = specificLocation.Value;
-        Vector3 randomPosition = new Vector3(specificLocation.Value.x, selectedPlane.transform.position.y, -specificLocation.Value.z); // 이렇게 진행 /////////////////////
+        Vector3 randomPosition = new Vector3(specificLocation.Value.x, selectedPlane.transform.position.y, specificLocation.Value.z); // 이렇게 진행 /////////////////////
         // 특정 위치가 주어지면 그 위치를 기반으로 평면 내 무작위 위치를 반환합니다.
         if (specificLocation.HasValue)
         {
             Debug.Log($"HasValue in: {randomPosition}"); // Debug Lo
+            Debug.Log("Selected Plane center : " + selectedPlane.center);
             //Vector3 randomPosition = specificLocation.Value;
             if (selectedPlane.boundary.Contains(new Vector2(randomPosition.x, randomPosition.z))) // z값 -해야 실행되나? 위쪽에서 z값 반전시켰기 때문에?
             {
@@ -243,6 +245,7 @@ public class RandomPersonPlacer : MonoBehaviour
     void getLocationInfo()
     {
         Debug.Log("getLocationInfo started");
+        locations.Clear();
 
         if (GlobalData.touchPositions.Count == 0)
         {
@@ -262,6 +265,15 @@ public class RandomPersonPlacer : MonoBehaviour
         //    });
         //}
 
+        Debug.Log("getLocationInfo locations count : " + GlobalData.locations.Count);
+        Debug.Log("getLocationInfo touchPositions count : " + GlobalData.touchPositions.Count);
+
+        if (GlobalData.locations.Count == 0)
+        {
+            Debug.LogWarning("GlobalData.locations 리스트가 비어있습니다. 로케이션이 없습니다.");
+            return;
+        }
+
         foreach (LocationProbability loc in GlobalData.locations)
         {
             Debug.Log("Touched position: " + loc.location);
@@ -270,7 +282,7 @@ public class RandomPersonPlacer : MonoBehaviour
             {
                 location = loc.location,
                 probability = loc.probability,
-                count = Random.Range(3, 10) // 무작위로 설정 (추후 제거 가능)
+                count = Random.Range(3, 5) // 무작위로 설정 (추후 제거 가능)
             });
         }
         
