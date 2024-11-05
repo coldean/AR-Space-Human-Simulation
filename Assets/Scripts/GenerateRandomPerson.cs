@@ -11,7 +11,7 @@ public class RandomPersonPlacer : MonoBehaviour
     public ARPlaneManager arPlaneManager;
     public GameObject personPrefab;
     public List<LocationProbability> locations; // 사용자 입력 위치 및 확률 정보.
-    public int totalPersons = 10; // 전체 생성할 'Person' 수.
+    public int totalPersons = 20; // 전체 생성할 'Person' 수.
     private bool hasSpawned = false; // Person이 생성됐는지 여부를 추적하는 플래그.
     private bool infoLoaded = false; // getLocationInfo 호출 여부를 추적하는 플래그
 
@@ -270,7 +270,7 @@ public class RandomPersonPlacer : MonoBehaviour
             {
                 location = loc.location,
                 probability = loc.probability,
-                count = Random.Range(1, 1) // 무작위로 설정 (추후 제거 가능)
+                count = Random.Range(3, 10) // 무작위로 설정 (추후 제거 가능)
             });
         }
         
