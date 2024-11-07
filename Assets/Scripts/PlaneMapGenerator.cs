@@ -66,8 +66,8 @@ public class PlaneMapGenerator : MonoBehaviour
         foreach (var planeData in planeDataList)
         {
             // �ٴڸ� �߽��� �ؽ�ó ��ǥ��� ��ȯ
-            int texX = (int)(planeData.Position.x * mapScale) + (mapWidth / 2);
-            int texY = (int)(planeData.Position.z * mapScale) + (mapHeight / 2);
+            int texX = (int)(planeData.Position.x * mapScale);
+            int texY = (int)(planeData.Position.z * mapScale);
             // �ٴڸ��� ũ��
             int planeWidth = (int)(planeData.Size.x * mapScale);
             int planeHeight = (int)(planeData.Size.y * mapScale);
